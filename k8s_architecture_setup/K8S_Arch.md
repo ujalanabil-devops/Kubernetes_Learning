@@ -42,6 +42,14 @@ Detailed explanation of:
 - High availability
 - Efficient resource utilization
 
+## Architecture Diagram
+
+![Architecture](images/Architecture_Diagram.png)
+
+## Components Diagram
+
+![Components](images/Architecture_components.png)
+
 ## Recommended Learning Path
 
 1. Linux Fundamentals
