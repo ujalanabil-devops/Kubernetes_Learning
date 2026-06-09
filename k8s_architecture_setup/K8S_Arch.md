@@ -2,8 +2,6 @@
 
 This repository contains beginner-friendly Kubernetes architecture diagrams designed to help learners understand the core components of a Kubernetes cluster and how they interact.
 
-## Images Included
-
 ### 1. Kubernetes Architecture – For Beginners
 - Control Plane components
 - Worker Nodes
@@ -11,17 +9,13 @@ This repository contains beginner-friendly Kubernetes architecture diagrams desi
 - CoreDNS, Ingress Controller, Dashboard, and Metrics Server
 - Application deployment workflow
 
-### 2. Kubernetes Components Explained
-Detailed explanation of:
-- API Server
-- etcd
-- Scheduler
-- Controller Manager
-- Cloud Controller Manager
-- Kubelet
-- Kube Proxy
-- Container Runtime
-- Pods, Services, Deployments, and Namespaces
+## Architecture Diagram
+
+![Architecture](images/Architecture_Diagram.png)
+
+## Components Diagram
+
+![Components](images/Architecture_Components.png)
 
 ## How Kubernetes Works
 
@@ -41,14 +35,6 @@ Detailed explanation of:
 - Load balancing
 - High availability
 - Efficient resource utilization
-
-## Architecture Diagram
-
-![Architecture](images/Architecture_Diagram.png)
-
-## Components Diagram
-
-![Components](images/Architecture_components.png)
 
 ## Recommended Learning Path
 
