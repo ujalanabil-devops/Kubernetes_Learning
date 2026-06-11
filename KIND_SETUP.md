@@ -105,7 +105,9 @@ chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 kubectl version --client
 ```
-
+Note:- 
+- $(curl -L -s https://dl.k8s.io/release/stable.txt) - gives stable latest Kubernets version.
+- curl -LO - follow redirect and save file with original name(kubectl)
 ---
 
 ## Step 5: Install Kind
@@ -116,7 +118,10 @@ chmod +x kind
 sudo mv kind /usr/local/bin/
 kind version
 ```
-
+Note:-
+- curl -download or transfer data from URL.
+- (-L) follow those redirects until you reach the real file.
+- (-o ./kind) save output to a file named kind in the current directory.
 ---
 
 ## Step 6: Create Kind Configuration
