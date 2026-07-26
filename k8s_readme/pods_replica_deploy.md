@@ -5,7 +5,7 @@ A Pod is the smallest deployable unit in Kubernetes and can contain one or more 
 ## Replication Controller(RC)
 
 A replica controller is the older Kubernetes object used to ensure a specified number of Pod relicas are running at all times.
-
+```
 ReplicationController
         |
         +---- Pod 1
@@ -13,10 +13,12 @@ ReplicationController
         +---- Pod 3 (Failed)
                     |
                     +--> New Pod Created
+```
+Commands:-
 
-kubectl apply -f rc.yaml
-kubectl get rc
-kubectl get pods
+- kubectl apply -f rc.yaml
+- kubectl get rc
+- kubectl get pods
 
 ## ReplicaSet(RS)
 
