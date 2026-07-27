@@ -117,7 +117,7 @@ selector:
 ```
 
 ### Difference between ReplicaSet and Deployment?
-
+```
 ReplicaSet                      Deployment
 
 Manages Pods                  Manages ReplicaSets
@@ -127,6 +127,7 @@ No rollback                   Rollback supported
 No rolling updates            Rolling updates
 
 Rarely created directly        Most commonly used
+```
 
 ### Field Explanations
 
