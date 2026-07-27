@@ -118,7 +118,7 @@ selector:
 
 ### Difference between ReplicaSet and Deployment?
 ```
-ReplicaSet                      Deployment
+####ReplicaSet                      ####Deployment
 
 Manages Pods                  Manages ReplicaSets
 
