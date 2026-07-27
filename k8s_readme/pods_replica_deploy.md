@@ -118,7 +118,7 @@ selector:
 
 ### Difference between ReplicaSet and Deployment?
 ```
-####ReplicaSet                      ####Deployment
+ReplicaSet                      Deployment
 
 Manages Pods                  Manages ReplicaSets
 
@@ -128,6 +128,13 @@ No rolling updates            Rolling updates
 
 Rarely created directly        Most commonly used
 ```
+### Dry Run
+
+- kubectl create deploy deploy/deploy_name --image=nginx --dry-run=client (it will not deploy,for test)
+
+Generate yaml and move to new file:-
+
+- kubectl create deploy deploy/deploy_name --image=nginx --dry-run=clinent -o yaml > deploy.yaml
 
 ### Field Explanations
 
@@ -143,5 +150,5 @@ Rarely created directly        Most commonly used
 - containerPort: Port exposed by the application inside the container.
 
 ### Common Additional Fields
-namespace, resources (requests/limits), env, volumeMounts, volumes, restartPolicy.
+- namespace, resources (requests/limits), env, volumeMounts, volumes, restartPolicy.
 
