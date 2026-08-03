@@ -209,6 +209,7 @@ maxSurge
 Use cases
 - High‑traffic apps needing extra capacity during rollout
 - Canary‑style rollouts
+
 maxUnavailable
 - How many pods can be unavailable during rollout.
 - Example:
@@ -242,27 +243,34 @@ Pause a rollout
 - You want to inspect the new ReplicaSet
 - You want to apply multiple changes before resuming
 - You want to stop a bad rollout mid‑way
+  
 ```
 kubectl rollout pause deployment nginx-deploy
 ```
+
 Resume a rollout
+
 ```
 kubectl rollout resume deployment nginx-deploy
 ```
+
 Production use case
 - You push a new version → metrics spike → pause rollout → investigate → resume or rollback.
+- 
 ### Rollback Best Practices
 - Always check rollout history
 - Never delete old ReplicaSets manually
 - Use readiness probes to avoid rolling out broken pods
 - Monitor metrics during rollout
 - Use kubectl describe to inspect failures
+  
 ### Health Checks During Rollout (Readiness Probes)
 Readiness probes decide when a pod is ready to receive traffic.
 If readiness fails:
 - Pod stays out of service
 - Deployment rollout pauses automatically
 - No traffic goes to broken pods
+  
 Why readiness probes matter in rollouts:-
 
 1. Prevent bad versions from going live
@@ -272,5 +280,6 @@ Why readiness probes matter in rollouts:-
 - No downtime
 
 2. Protect users from broken deployments-Traffic only goes to healthy pods.
+   
 3. Enable safe automated rollbacks-Some platforms (Argo Rollouts, Flagger) rollback automatically when readiness fails.
 
