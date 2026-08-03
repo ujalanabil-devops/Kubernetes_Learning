@@ -76,10 +76,21 @@ Commands:-
 - kubectl get deployments (check running deployments)
 - kubectl explain deploy (to check deploy details)
 - kubectl describe po deploy_name (detailed sepc of deployments)
-  
+
+Rollout:-
+
+- kubectl get deployment nginx-deploy -o yaml (check actual container name)
+- kubectl set image deployment/nginx-deploy container_name=nginx:1.26
+- kubectl rollout status deployment/nginx-deploy
+
 Rollback:-
 - kubectl rollout history deploy/deloy_name (see the rollout history)
 - kubectl undo deploy/deloy_name (rollback changes)
+
+remove the old ReplicaSet:-
+
+- kubectl rollout history deployment nginx-deploy --revision=<number>
+- kubectl delete rs <old-rs-name>
 
 ### Difference between ReplicationController and ReplicaSet?
 
@@ -151,4 +162,115 @@ Generate yaml and move to new file:-
 
 ### Common Additional Fields
 - namespace, resources (requests/limits), env, volumeMounts, volumes, restartPolicy.
+
+### Rollout Strategies: Recreate vs RollingUpdate
+
+Recreate Strategy
+What it does
+- Deletes all old pods at once
+- Then creates new pods
+- Causes downtime
+
+When used in production
+Rarely — only when:
+- The app cannot run two versions at the same time
+- Database schema changes require exclusive access
+- Old and new versions conflict
+
+Spec
+```
+strategy:
+  type: Recreate
+```
+RollingUpdate Strategy (default)
+What it does
+- Gradually replaces old pods with new pods
+- Ensures zero downtime
+- Uses maxSurge and maxUnavailable to control speed
+
+When used in production
+- Almost always — safe, stable, predictable.
+
+Spec
+```
+strategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 1
+```
+### maxSurge & maxUnavailable Tuning
+maxSurge
+- How many extra pods Kubernetes can create above the desired count.
+- Example:
+- Desired replicas: 5
+- maxSurge: 2
+- → Kubernetes may temporarily run 7 pods
+Use cases
+- High‑traffic apps needing extra capacity during rollout
+- Canary‑style rollouts
+maxUnavailable
+- How many pods can be unavailable during rollout.
+- Example:
+- Desired replicas: 5
+- maxUnavailable: 1
+- → Kubernetes ensures at least 4 pods stay running
+Use cases
+- Critical apps where downtime is unacceptable
+- Slow rollouts for stability
+
+### Production Tuning Examples
+
+High availability (banking, payments)
+```
+maxSurge: 1
+maxUnavailable: 0
+```
+Fast rollout (internal apps)
+```
+maxSurge: 3
+maxUnavailable: 2
+```
+Resource‑constrained clusters
+```
+maxSurge: 0
+maxUnavailable: 1
+```
+### Pausing & Resuming Rollouts
+Pause a rollout
+- Useful when:
+- You want to inspect the new ReplicaSet
+- You want to apply multiple changes before resuming
+- You want to stop a bad rollout mid‑way
+```
+kubectl rollout pause deployment nginx-deploy
+```
+Resume a rollout
+```
+kubectl rollout resume deployment nginx-deploy
+```
+Production use case
+- You push a new version → metrics spike → pause rollout → investigate → resume or rollback.
+### Rollback Best Practices
+- Always check rollout history
+- Never delete old ReplicaSets manually
+- Use readiness probes to avoid rolling out broken pods
+- Monitor metrics during rollout
+- Use kubectl describe to inspect failures
+### Health Checks During Rollout (Readiness Probes)
+Readiness probes decide when a pod is ready to receive traffic.
+If readiness fails:
+- Pod stays out of service
+- Deployment rollout pauses automatically
+- No traffic goes to broken pods
+Why readiness probes matter in rollouts:-
+
+1. Prevent bad versions from going live
+- If the new pod fails readiness:
+- Old pods stay running
+- Rollout stops
+- No downtime
+
+2. Protect users from broken deployments-Traffic only goes to healthy pods.
+3. Enable safe automated rollbacks-Some platforms (Argo Rollouts, Flagger) rollback automatically when readiness fails.
 
