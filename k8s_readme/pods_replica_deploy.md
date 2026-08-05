@@ -2,6 +2,75 @@
 
 A Pod is the smallest deployable unit in Kubernetes and can contain one or more containers.
 
+## Kubernetes Pod: Life Cycle
+
+1. Pending - The pod has been accepted by the API server, but not yet running.
+Why it happens:
+- Scheduler hasn’t assigned a node yet
+- Image is still being pulled
+- Node doesn’t have enough CPU/memory
+- PVC is still being attached
+How to check:
+run kubectl describe pod <pod>
+look for :-
+- FailedScheduling
+- ImagePullBackOff
+- ErrImagePull
+
+2. Running - The pod is scheduled, containers are created, and at least one container is running.
+   
+4. Succeeded - The pod completed successfully and exited with code 0.
+- jobs,cron jobs
+- A pod running a backup script finishes → status becomes Succeeded.
+
+5. Failed - The pod terminated with a non‑zero exit code.
+Common causes:
+- Application crash
+- Misconfiguration
+- Bad environment variables
+- Missing files
+- Failed init container
+Debug:
+```
+kubectl logs <pod> --previous
+kubectl describe pod <pod>
+```
+5. Unknown - The node cannot be reached.
+Causes:
+- Node is down
+- Network partition
+- Kubelet crash
+- Cloud provider issue
+- This is rare but dangerous in production.
+
+## Pod Lifecycle Events (Important for Debugging)
+Pods also go through container-level states, which matter more during troubleshooting:
+- ContainerCreating - Image is being pulled, volumes attached.
+- CrashLoopBackOff - Container keeps crashing → Kubernetes retries with exponential backoff.
+- ImagePullBackOff - Image cannot be pulled.
+- Terminating - Pod is shutting down gracefully.
+- Evicted - Node pressure (CPU, memory, disk) forced the pod out.
+
+## Pod Termination Process (Graceful Shutdown)
+When a pod is deleted:
+- SIGTERM sent to containers
+- Kubernetes waits for terminationGracePeriodSeconds (default: 30s)
+- If still running → SIGKILL
+- Pod removed from API server
+Why this matters:
+- If your app doesn’t handle SIGTERM, you get:
+- Broken connections
+- Lost requests
+- Corrupted data
+
+## Init Containers (Pre‑Lifecycle Step)
+Init containers run before main containers.
+Used for:
+- Setting up config
+- Waiting for dependencies
+- Preparing volumes
+- If an init container fails → pod never enters Running.
+
 ## Replication Controller(RC)
 
 A replica controller is the older Kubernetes object used to ensure a specified number of Pod relicas are running at all times.
